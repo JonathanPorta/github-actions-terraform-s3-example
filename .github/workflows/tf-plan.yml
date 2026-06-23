@@ -20,6 +20,8 @@ jobs:
       # Marketplace: https://github.com/marketplace/actions/run-tfsec
       - name: "Setup - Security Scan"
         uses: aquasecurity/tfsec-action@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Provides AWS credentials to Terraform
       # By default, Terraform checks the home directory for a .aws folder with a credential file
