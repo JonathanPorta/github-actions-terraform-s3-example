@@ -1,0 +1,30 @@
+# Local .terraform directories
+**/.terraform/*
+
+# Terraform lockfile (kept out of this example; pin in real projects)
+.terraform.lock.hcl
+
+# Terraform state files - may contain sensitive data
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Files that may contain secrets or environment-specific values
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI configuration files
+.terraformrc
+terraform.rc
+
+# Plan output files
+*.tfplan
+
+# AWS credentials that may be generated locally
+.aws/
