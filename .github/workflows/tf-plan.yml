@@ -8,20 +8,29 @@ jobs:
   terraform-plan:
     name: "Terraform Plan"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       # Checkout the code
       # Marketplace: https://github.com/marketplace/actions/checkout
       - name: "Setup - Checkout"
         uses: actions/checkout@v2.1.0
 
-      # Static analysis of Terraform templates to spot potential security issues
-      # Replaces the deprecated triat/terraform-security-scan@v1 with the maintained
-      # aquasecurity/tfsec-action, which runs the same tfsec tool under the hood.
-      # Marketplace: https://github.com/marketplace/actions/run-tfsec
+      # Static analysis of Terraform templates to spot potential security issues.
+      # Uses Aqua Security Trivy in config mode, which supersedes tfsec for IaC scanning.
+      # Pinned to the immutable commit for trivy-action v0.35.0, which Aqua identified
+      # as not affected by the March 2026 Trivy supply-chain incident.
+      # Marketplace: https://github.com/marketplace/actions/aqua-security-trivy
       - name: "Setup - Security Scan"
-        uses: aquasecurity/tfsec-action@v1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        with:
+          scan-type: "config"
+          scan-ref: "."
+          version: "v0.69.3"
+          hide-progress: true
+          exit-code: "1"
+          severity: "CRITICAL,HIGH"
 
       # Provides AWS credentials to Terraform
       # By default, Terraform checks the home directory for a .aws folder with a credential file
